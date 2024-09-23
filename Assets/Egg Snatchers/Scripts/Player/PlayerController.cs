@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header(" Components ")]
+    [SerializeField] PlayerDetection playerDetection;
+
     [Header(" Elements ")]
     [SerializeField] private MobileJoystick joystick;
 
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
         Vector2 targetPosition = transform.position.With(x: targetX);
 
-        transform.position = targetPosition;
+        if (!playerDetection.CanGoThere(targetPosition))
+            transform.position = targetPosition;
     }
 }
