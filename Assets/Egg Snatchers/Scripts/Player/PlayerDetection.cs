@@ -29,7 +29,7 @@ public class PlayerDetection : MonoBehaviour
         foreach (Collider col in colliders)
             Debug.Log(col.name);
 
-        return colliders.Length > 0;
+        return colliders.Length <= 0;
 
         //return true;
     }*/
@@ -43,7 +43,7 @@ public class PlayerDetection : MonoBehaviour
         Vector3 point0 = center + offset;
         Vector3 point1 = center - offset;
 
-        return Physics.OverlapCapsule(point0, point1, capsuleCollider.radius, groundMask).Length > 0; //<=0
+        return Physics.OverlapCapsule(point0, point1, capsuleCollider.radius, groundMask).Length <= 0; //<=0
     }
 
     public bool IsGrounded()

@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     [Header(" Elements ")]
     [SerializeField] private MobileJoystick joystick;
+    [SerializeField] private BoxCollider groundDetector;
+    [SerializeField] private LayerMask groundMask;
 
     [Header(" Settings ")]
     [SerializeField] private float moveSpeed;
@@ -37,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
         Vector2 targetPosition = transform.position.With(x: targetX);
 
-        if (!playerDetection.CanGoThere(targetPosition))
+        if (playerDetection.CanGoThere(targetPosition))
             transform.position = targetPosition;
     }
 
@@ -70,8 +72,20 @@ public class PlayerController : MonoBehaviour
         Vector3 targetPosition = transform.position.With(y: targetY);
 
         // We are falling
-        transform.position = targetPosition;
+        if (!playerDetection.CanGoThere(targetPosition))
+        {
+            Physics.Raycast(groundDetector.transform.position, Vector3.down, out RaycastHit hit, 1, groundMask);
 
+            if (hit.collider != null)
+                targetPosition.y = hit.point.y;
+
+            transform.position = targetPosition;
+
+            Land();
+            return;
+        }
+
+        transform.position = targetPosition;
         ySpeed += Physics.gravity.y * Time.deltaTime;
 
         if (playerDetection.IsGrounded())

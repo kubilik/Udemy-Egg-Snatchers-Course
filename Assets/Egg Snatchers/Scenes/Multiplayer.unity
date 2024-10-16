@@ -473,7 +473,7 @@ PrefabInstance:
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
@@ -1488,7 +1488,7 @@ PrefabInstance:
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
@@ -1963,7 +1963,7 @@ Transform:
   m_GameObject: {fileID: 676912522}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.27, y: 4.37, z: 0}
+  m_LocalPosition: {x: 23.4, y: 27.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1985,6 +1985,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerDetection: {fileID: 676912526}
   joystick: {fileID: 1516838844}
+  groundDetector: {fileID: 1174134410}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
   moveSpeed: 6
 --- !u!114 &676912526
 MonoBehaviour:
@@ -6130,7 +6134,7 @@ PrefabInstance:
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
@@ -6909,7 +6913,7 @@ PrefabInstance:
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
@@ -8550,7 +8554,7 @@ PrefabInstance:
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
@@ -9459,7 +9463,7 @@ PrefabInstance:
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5520990690293233094, guid: f3f8f079435e8b64d9df729333c3dbe7,
         type: 3}
