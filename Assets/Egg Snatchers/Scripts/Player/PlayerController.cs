@@ -79,15 +79,22 @@ public class PlayerController : MonoBehaviour
 
             if (hit.collider != null)
                 targetPosition.y = hit.point.y;
+            else
+            {
+                Physics.Raycast(transform.position, Vector3.up, out hit, 3f, groundMask);
 
-            transform.position = targetPosition;
+                float maxY = hit.point.y;
+                targetPosition.y = maxY - 2.4f;
 
-            Land();
-            return;
+                ySpeed = 0;
+            }
+        }
+        else
+        {
+            ySpeed += Physics.gravity.y * Time.deltaTime;
         }
 
         transform.position = targetPosition;
-        ySpeed += Physics.gravity.y * Time.deltaTime;
 
         if (playerDetection.IsGrounded())
             Land();
