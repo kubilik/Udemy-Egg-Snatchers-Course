@@ -7,6 +7,7 @@ public class PlayerDetection : MonoBehaviour
     [Header(" Elements ")]
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private CapsuleCollider capsuleCollider;
 
     void Start()
     {
@@ -19,6 +20,7 @@ public class PlayerDetection : MonoBehaviour
 
     }
 
+    /*
     public bool CanGoThere(Vector3 targetPosition)
     {
         Vector3 center = targetPosition + boxCollider.center;
@@ -30,5 +32,17 @@ public class PlayerDetection : MonoBehaviour
         return colliders.Length > 0;
 
         //return true;
+    }*/
+
+    public bool CanGoThere(Vector3 targetPosition)
+    {
+        Vector3 center = targetPosition + capsuleCollider.center;
+
+        float halfHeight = (capsuleCollider.height / 2) - capsuleCollider.radius;
+        Vector3 offset = transform.up * halfHeight;
+        Vector3 point0 = center + offset;
+        Vector3 point1 = center - offset;
+
+        return Physics.OverlapCapsule(point0, point1, capsuleCollider.radius, groundMask).Length > 0;
     }
 }
