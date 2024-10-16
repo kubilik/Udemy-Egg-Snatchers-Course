@@ -11,9 +11,26 @@ public class PlayerAnimator : MonoBehaviour
     [Header(" Elements ")]
     [SerializeField] private Animator animator;
 
-    void Start()
+    private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+
+        playerController.onJumpStarted += Jump;
+        playerController.onFallStarted += Fall;
+        playerController.onLandStarted += Land;
+    }
+
+    private void OnDestroy()
+    {
+        playerController.onJumpStarted -= Jump;
+        playerController.onFallStarted -= Fall;
+        playerController.onLandStarted -= Land;
+
+    }
+
+    void Start()
+    {
+
     }
 
 
@@ -25,5 +42,20 @@ public class PlayerAnimator : MonoBehaviour
     private void UpdateBlendTree()
     {
         animator.SetFloat("xSpeed", playerController.XSpeed);
+    }
+
+    private void Jump()
+    {
+        animator.Play("Jump");
+    }
+
+    private void Fall()
+    {
+        animator.Play("Fall");
+    }
+
+    private void Land()
+    {
+        animator.Play("Land");
     }
 }

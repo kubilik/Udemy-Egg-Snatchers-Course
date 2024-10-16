@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,6 +21,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpSpeed;
     public float XSpeed { get; private set; }
     private float ySpeed;
+
+    [Header(" Actions ")]
+    public Action onJumpStarted;
+    public Action onFallStarted;
+    public Action onLandStarted;
 
     void Start()
     {
@@ -119,17 +125,23 @@ public class PlayerController : MonoBehaviour
     private void StartFalling()
     {
         playerState = PlayerState.Air;
+
+        onFallStarted?.Invoke();
     }
 
     private void Land()
     {
         playerState = PlayerState.Grounded;
         ySpeed = 0;
+
+        onLandStarted?.Invoke();
     }
 
     public void Jump()
     {
         playerState = PlayerState.Air;
         ySpeed = jumpSpeed;
+
+        onJumpStarted?.Invoke();
     }
 }
