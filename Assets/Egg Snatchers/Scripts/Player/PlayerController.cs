@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MoveHorizontal();
+
+        if (playerDetection.IsGrounded())
+            Debug.Log("We're Grounded !! ");
     }
 
     private void MoveHorizontal()
