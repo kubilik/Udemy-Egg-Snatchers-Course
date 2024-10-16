@@ -1944,9 +1944,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 676912523}
+  - component: {fileID: 676912527}
   - component: {fileID: 676912524}
   - component: {fileID: 676912526}
-  - component: {fileID: 676912527}
+  - component: {fileID: 676912528}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2034,6 +2035,19 @@ CapsuleCollider:
   m_Height: 2.2645085
   m_Direction: 1
   m_Center: {x: 0, y: 1.1927458, z: 0}
+--- !u!114 &676912528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676912522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29bc59acfa4cab42b0f0b3d33378131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 8947388704634598084}
 --- !u!1001 &680208367
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5700,6 +5714,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mobile Joystick Zone
+      objectReference: {fileID: 0}
+    - target: {fileID: 1127573996609057480, guid: 10090517b0ea82a4fa4ec5dc6d9e630d,
+        type: 3}
+      propertyPath: moveFactor
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1127573996609057480, guid: 10090517b0ea82a4fa4ec5dc6d9e630d,
         type: 3}
@@ -9421,7 +9440,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2414068930887545348}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
@@ -9430,7 +9449,7 @@ Transform:
   - {fileID: 2214091897416627163}
   - {fileID: 6524077716871403955}
   m_Father: {fileID: 676912523}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1001 &3154725774391129249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10490,7 +10509,7 @@ Animator:
   m_GameObject: {fileID: 2414068930887545348}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 422d303827b023246a2be13af615ae61, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 53633ac7c4d17ea4082b4370d1ef7c2e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

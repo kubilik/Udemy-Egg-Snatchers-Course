@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [Header(" Settings ")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpSpeed;
+    public float XSpeed { get; private set; }
     private float ySpeed;
 
     void Start()
@@ -34,6 +35,11 @@ public class PlayerController : MonoBehaviour
     private void MoveHorizontal()
     {
         Vector2 moveVector = joystick.GetMoveVector();
+
+        XSpeed = Mathf.Abs(moveVector.x);
+
+        ManageFacing(moveVector.x);
+
         moveVector.x *= moveSpeed;
 
         float targetX = transform.position.x + moveVector.x * Time.deltaTime;
@@ -42,6 +48,13 @@ public class PlayerController : MonoBehaviour
 
         if (playerDetection.CanGoThere(targetPosition, out Collider firstCollider))
             transform.position = targetPosition;
+    }
+
+    private void ManageFacing(float xSpeed)
+    {
+        float facing = xSpeed != 0 ? Mathf.Sign(xSpeed) : transform.localScale.x;
+
+        transform.localScale = transform.localScale.With(x: facing);
     }
 
     private void MoveVertical()
