@@ -1990,7 +1990,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   moveSpeed: 6
-  jumpSpeed: 15
+  jumpSpeed: 24
 --- !u!114 &676912526
 MonoBehaviour:
   m_ObjectHideFlags: 0

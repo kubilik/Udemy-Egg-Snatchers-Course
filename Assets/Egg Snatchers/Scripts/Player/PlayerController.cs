@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
 
         Vector2 targetPosition = transform.position.With(x: targetX);
 
-        if (playerDetection.CanGoThere(targetPosition))
+        if (playerDetection.CanGoThere(targetPosition, out Collider firstCollider))
             transform.position = targetPosition;
     }
 
@@ -73,17 +73,20 @@ public class PlayerController : MonoBehaviour
         Vector3 targetPosition = transform.position.With(y: targetY);
 
         // We are falling
-        if (!playerDetection.CanGoThere(targetPosition))
+        if (!playerDetection.CanGoThere(targetPosition, out Collider firstCollider))
         {
+            float minY = firstCollider.ClosestPoint(transform.position).y;
             Physics.Raycast(groundDetector.transform.position, Vector3.down, out RaycastHit hit, 1, groundMask);
 
             if (hit.collider != null)
-                targetPosition.y = hit.point.y;
+                targetPosition.y = minY;
             else
             {
-                Physics.Raycast(transform.position, Vector3.up, out hit, 3f, groundMask);
+                float maxY = firstCollider.ClosestPoint(transform.position).y;
 
-                float maxY = hit.point.y;
+                //Physics.Raycast(transform.position, Vector3.up, out hit, 3f, groundMask);
+
+                //float maxY = hit.point.y;
                 targetPosition.y = maxY - 2.4f;
 
                 ySpeed = 0;

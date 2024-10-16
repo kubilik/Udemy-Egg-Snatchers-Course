@@ -48,7 +48,7 @@ public class PlayerDetection : MonoBehaviour
             playerController.Jump();
     }
 
-    public bool CanGoThere(Vector3 targetPosition)
+    public bool CanGoThere(Vector3 targetPosition, out Collider firstCollider)
     {
         Vector3 center = targetPosition + capsuleCollider.center;
 
@@ -56,6 +56,13 @@ public class PlayerDetection : MonoBehaviour
         Vector3 offset = transform.up * halfHeight;
         Vector3 point0 = center + offset;
         Vector3 point1 = center - offset;
+
+        Collider[] colliders = Physics.OverlapCapsule(point0, point1, capsuleCollider.radius, groundMask);
+
+        if (colliders.Length > 0)
+            firstCollider = colliders[0];
+        else
+            firstCollider = null;
 
         return Physics.OverlapCapsule(point0, point1, capsuleCollider.radius, groundMask).Length <= 0;
     }
