@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     [Header(" Settings ")]
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpSpeed;
     private float ySpeed;
 
     void Start()
@@ -101,5 +102,11 @@ public class PlayerController : MonoBehaviour
     {
         playerState = PlayerState.Grounded;
         ySpeed = 0;
+    }
+
+    public void Jump()
+    {
+        playerState = PlayerState.Air;
+        ySpeed = jumpSpeed;
     }
 }

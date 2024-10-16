@@ -1990,6 +1990,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   moveSpeed: 6
+  jumpSpeed: 15
 --- !u!114 &676912526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2005,6 +2006,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  trampolineMask:
+    serializedVersion: 2
+    m_Bits: 128
   boxCollider: {fileID: 1174134410}
   capsuleCollider: {fileID: 676912527}
 --- !u!136 &676912527

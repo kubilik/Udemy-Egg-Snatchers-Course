@@ -2,22 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerController))]
 public class PlayerDetection : MonoBehaviour
 {
+    [Header(" Components ")]
+    private PlayerController playerController;
+
     [Header(" Elements ")]
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private LayerMask trampolineMask;
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private CapsuleCollider capsuleCollider;
 
     void Start()
     {
-
+        playerController = GetComponent<PlayerController>();
     }
 
 
     void Update()
     {
-
+        DetectTrampolines();
     }
 
     /*
@@ -34,6 +39,15 @@ public class PlayerDetection : MonoBehaviour
         //return true;
     }*/
 
+    private void DetectTrampolines()
+    {
+        if (!IsGrounded())
+            return;
+
+        if (Physics.OverlapBox(boxCollider.transform.position, boxCollider.size / 2, Quaternion.identity, trampolineMask).Length > 0)
+            playerController.Jump();
+    }
+
     public bool CanGoThere(Vector3 targetPosition)
     {
         Vector3 center = targetPosition + capsuleCollider.center;
@@ -43,7 +57,7 @@ public class PlayerDetection : MonoBehaviour
         Vector3 point0 = center + offset;
         Vector3 point1 = center - offset;
 
-        return Physics.OverlapCapsule(point0, point1, capsuleCollider.radius, groundMask).Length <= 0; //<=0
+        return Physics.OverlapCapsule(point0, point1, capsuleCollider.radius, groundMask).Length <= 0;
     }
 
     public bool IsGrounded()
