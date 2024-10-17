@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerDetection playerDetection;
 
     [Header(" Elements ")]
-    [SerializeField] private MobileJoystick joystick;
     [SerializeField] private BoxCollider groundDetector;
     [SerializeField] private LayerMask groundMask;
 
@@ -40,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
     private void MoveHorizontal()
     {
-        Vector2 moveVector = joystick.GetMoveVector();
+        Vector2 moveVector = InputManager.instance.GetMoveVector();
 
         XSpeed = Mathf.Abs(moveVector.x);
 
