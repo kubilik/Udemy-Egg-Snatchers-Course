@@ -4,7 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using Unity.Netcode;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : NetworkBehaviour
 {
     [Header(" Elements ")]
     [SerializeField] private CinemachineTargetGroup targetGroup;
@@ -12,40 +12,58 @@ public class CameraManager : MonoBehaviour
 
     private List<PlayerController> playerControllers = new List<PlayerController>();
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
+        NetworkManager.OnServerStarted += ServerStartedCallback;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void ServerStartedCallback()
     {
-        if (configured)
+        if (!IsServer)
             return;
 
-        if (playerControllers.Count < 2)
-        {
-            StorePlayers();
-            return;
-        }
-
-        UpdateCameraTargetGroup();
+        NetworkManager.OnClientConnectedCallback += ClientConnectedCallback;
     }
 
-    private void StorePlayers()
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (!IsServer)
+            return;
+
+        NetworkManager.OnClientConnectedCallback -= ClientConnectedCallback;
+    }
+
+    private void ClientConnectedCallback(ulong clientId)
+    {
+        int playerCount = NetworkManager.Singleton.ConnectedClients.Count;
+
+        Debug.Log("Player Count : " + playerCount);
+
+        if (playerCount < 2)
+            return;
+
+        StorePlayersRpc();
+        UpdateCameraTargetGroupRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void StorePlayersRpc()
     {
         PlayerController[] playerControllersArray = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
 
-        if (playerControllersArray.Length < 2)
-            return;
-
         playerControllers = new List<PlayerController>(playerControllersArray);
+
+        Debug.Log("Storing Players");
     }
 
-    private void UpdateCameraTargetGroup()
+    [Rpc(SendTo.Everyone)]
+    private void UpdateCameraTargetGroupRpc()
     {
         configured = true;
+
+        Debug.Log("Updating Target Group");
 
         foreach (PlayerController playerController in playerControllers)
         {
