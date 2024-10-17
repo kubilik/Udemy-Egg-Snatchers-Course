@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerAnimator : MonoBehaviour
+public class PlayerAnimator : NetworkBehaviour
 {
     [Header(" Components ")]
     private PlayerController playerController;
@@ -36,10 +37,11 @@ public class PlayerAnimator : MonoBehaviour
 
     void Update()
     {
-        UpdateBlendTree();
+        UpdateBlendTreeRpc();
     }
 
-    private void UpdateBlendTree()
+    [Rpc(SendTo.Everyone)]
+    private void UpdateBlendTreeRpc()
     {
         animator.SetFloat("xSpeed", playerController.XSpeed);
     }
