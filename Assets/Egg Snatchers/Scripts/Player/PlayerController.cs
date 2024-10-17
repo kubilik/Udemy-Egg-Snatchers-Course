@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.Netcode;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     enum PlayerState { Grounded, Air }
     private PlayerState playerState;
@@ -32,8 +33,10 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        MoveHorizontal();
+        if (!IsOwner)
+            return;
 
+        MoveHorizontal();
         MoveVertical();
     }
 
