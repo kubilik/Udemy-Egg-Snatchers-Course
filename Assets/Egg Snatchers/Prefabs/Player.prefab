@@ -493,6 +493,9 @@ MonoBehaviour:
   trampolineMask:
     serializedVersion: 2
     m_Bits: 128
+  eggMask:
+    serializedVersion: 2
+    m_Bits: 256
   boxCollider: {fileID: 4806519222221092300}
   capsuleCollider: {fileID: 1808939335776045946}
 --- !u!114 &3012775237281177652
