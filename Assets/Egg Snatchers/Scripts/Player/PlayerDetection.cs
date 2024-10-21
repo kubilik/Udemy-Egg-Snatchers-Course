@@ -17,10 +17,14 @@ public class PlayerDetection : NetworkBehaviour
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private CapsuleCollider capsuleCollider;
 
+    [Header(" Settings ")]
+    private bool canStealEgg;
+
     public bool IsHoldingEgg { get; private set; }
 
     void Start()
     {
+        canStealEgg = true;
         playerController = GetComponent<PlayerController>();
     }
 
@@ -45,7 +49,7 @@ public class PlayerDetection : NetworkBehaviour
 
     private void DetectEggs()
     {
-        if (IsHoldingEgg)
+        if (!canStealEgg || IsHoldingEgg)
             return;
 
         Collider[] detectedEggs = DetectColliders(transform.position, eggMask, out Collider egg);
@@ -53,9 +57,32 @@ public class PlayerDetection : NetworkBehaviour
         if (egg == null)
             return;
 
-        GrabEgg(egg);
+        if (egg.transform.parent == null)
+            GrabEgg(egg);
+        else if (egg.transform.parent.TryGetComponent(out PlayerDetection playerDetection))
+            StealEggFrom(playerDetection, egg);
 
         Debug.Log("Egg Detected");
+    }
+
+    private void StealEggFrom(PlayerDetection otherPlayer, Collider egg)
+    {
+        GrabEgg(egg);
+        otherPlayer.LoseEgg();
+    }
+
+    private void LoseEgg()
+    {
+        IsHoldingEgg = false;
+        canStealEgg = false;
+
+        StartCoroutine(LoseEggCoroutine());
+    }
+
+    IEnumerator LoseEggCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(1);
+        canStealEgg = true;
     }
 
     private void GrabEgg(Collider egg)
