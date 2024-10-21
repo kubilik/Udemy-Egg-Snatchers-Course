@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Unity.Netcode;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerDetection : MonoBehaviour
+public class PlayerDetection : NetworkBehaviour
 {
     [Header(" Components ")]
     private PlayerController playerController;
@@ -28,7 +29,7 @@ public class PlayerDetection : MonoBehaviour
     {
         DetectTrampolines();
 
-        if (!IsHoldingEgg)
+        if (IsServer)
             DetectEggs();
     }
 
@@ -44,6 +45,9 @@ public class PlayerDetection : MonoBehaviour
 
     private void DetectEggs()
     {
+        if (IsHoldingEgg)
+            return;
+
         Collider[] detectedEggs = DetectColliders(transform.position, eggMask, out Collider egg);
 
         if (egg == null)
