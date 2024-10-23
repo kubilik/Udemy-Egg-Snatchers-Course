@@ -31,9 +31,9 @@ public class GameManager : NetworkBehaviour
         PlayerFillManager.onPlayerEmpty += PlayerEmptyCallback;
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
-        base.OnDestroy();
+        base.OnNetworkDespawn();
 
         NetworkManager.OnClientConnectedCallback -= ClientConnectedCallback;
         PlayerFillManager.onPlayerEmpty -= PlayerEmptyCallback;

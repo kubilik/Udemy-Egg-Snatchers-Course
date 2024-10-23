@@ -16,8 +16,10 @@ public class PlayerPlacer : NetworkBehaviour
         NetworkManager.OnClientConnectedCallback += ClientConnectedCallback;
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
+        base.OnNetworkDespawn();
+
         NetworkManager.OnClientConnectedCallback -= ClientConnectedCallback;
     }
 

@@ -33,11 +33,15 @@ public class PlayerController : NetworkBehaviour
     }
     void Update()
     {
-        if (!IsOwner || !GameManager.instance.IsGameState())
+        if (!IsOwner)
+            return;
+
+        MoveVertical();
+
+        if (!GameManager.instance.IsGameState())
             return;
 
         MoveHorizontal();
-        MoveVertical();
     }
 
     private void MoveHorizontal()

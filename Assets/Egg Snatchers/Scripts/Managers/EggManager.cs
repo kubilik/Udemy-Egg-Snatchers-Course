@@ -15,8 +15,10 @@ public class EggManager : NetworkBehaviour
         NetworkManager.OnServerStarted += ServerStartedCallback;
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
+        base.OnNetworkDespawn();
+
         NetworkManager.OnServerStarted -= ServerStartedCallback;
     }
 
