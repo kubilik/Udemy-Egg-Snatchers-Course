@@ -8891,7 +8891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerups:
-  - {fileID: 566234247581905317, guid: f4f8776171e2fc94f98ecdeefaacc683, type: 3}
+  - {fileID: 566234247581905317, guid: a137f1bfef63c8a4db099ae01ed355a2, type: 3}
   spawnPositions:
   - {fileID: 1613491147}
   - {fileID: 1647724607}

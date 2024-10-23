@@ -4,11 +4,12 @@ using TMPro;
 using UnityEngine;
 using Unity.Netcode;
 
-[RequireComponent(typeof(PlayerController))]
+[RequireComponent(typeof(PlayerController), typeof(PlayerRenderer))]
 public class PlayerDetection : NetworkBehaviour
 {
     [Header(" Components ")]
     private PlayerController playerController;
+    private PlayerRenderer playerRenderer;
 
     [Header(" Elements ")]
     [SerializeField] private LayerMask groundMask;
@@ -27,6 +28,7 @@ public class PlayerDetection : NetworkBehaviour
     {
         canStealEgg = true;
         playerController = GetComponent<PlayerController>();
+        playerRenderer = GetComponent<PlayerRenderer>();
     }
 
 
@@ -78,6 +80,7 @@ public class PlayerDetection : NetworkBehaviour
                 break;
 
             case Powerup.Type.Invisibility:
+                playerRenderer.Hide();
                 break;
         }
     }
