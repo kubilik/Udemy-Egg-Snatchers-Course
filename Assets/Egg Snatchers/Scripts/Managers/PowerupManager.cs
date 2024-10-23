@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class PowerupManagers : NetworkBehaviour, IGameStateListener
+public class PowerupManager : NetworkBehaviour, IGameStateListener
 {
     [Header("value")]
     [SerializeField] private Powerup[] powerups;

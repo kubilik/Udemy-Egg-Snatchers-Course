@@ -17,8 +17,9 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private LayerMask groundMask;
 
     [Header(" Settings ")]
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float jumpSpeed;
+    private float moveSpeed;
     public float XSpeed { get; private set; }
     private float ySpeed;
 
@@ -30,6 +31,7 @@ public class PlayerController : NetworkBehaviour
     void Start()
     {
         playerState = PlayerState.Grounded;
+        moveSpeed = maxMoveSpeed;
     }
     void Update()
     {
@@ -156,5 +158,21 @@ public class PlayerController : NetworkBehaviour
     private void UpdateXSpeedRpc(float xSpeed)
     {
         XSpeed = xSpeed;
+    }
+
+    Coroutine resetCoroutine;
+    public void SpeedUp()
+    {
+        if (resetCoroutine != null)
+            StopCoroutine(resetCoroutine);
+
+        moveSpeed = maxMoveSpeed * 1.5f;
+        resetCoroutine = StartCoroutine(ResetSpeedCoroutine());
+    }
+
+    IEnumerator ResetSpeedCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(10);
+        moveSpeed = maxMoveSpeed;
     }
 }

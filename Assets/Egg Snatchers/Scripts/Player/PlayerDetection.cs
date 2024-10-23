@@ -13,6 +13,7 @@ public class PlayerDetection : NetworkBehaviour
     [Header(" Elements ")]
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask trampolineMask;
+    [SerializeField] private LayerMask powerupMask;
     [SerializeField] private LayerMask eggMask;
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private CapsuleCollider capsuleCollider;
@@ -35,7 +36,7 @@ public class PlayerDetection : NetworkBehaviour
             return;
 
         DetectTrampolines();
-
+        DetectPowerups();
         if (IsServer)
             DetectEggs();
     }
@@ -48,6 +49,37 @@ public class PlayerDetection : NetworkBehaviour
 
         if (Physics.OverlapBox(boxCollider.transform.position, boxCollider.size / 2, Quaternion.identity, trampolineMask).Length > 0)
             playerController.Jump();
+    }
+
+    private void DetectPowerups()
+    {
+        if (IsHoldingEgg)
+            return;
+
+        Collider[] detectedPowerups = DetectColliders(transform.position, powerupMask, out Collider powerup);
+
+        if (powerup == null)
+            return;
+
+        GrabPowerup(powerup.GetComponent<Powerup>());
+    }
+
+    private void GrabPowerup(Powerup powerup)
+    {
+        Powerup.Type powerupType = powerup.PowerupType;
+
+        if (IsServer)
+            powerup.Destroy();
+
+        switch (powerupType)
+        {
+            case Powerup.Type.Speed:
+                playerController.SpeedUp();
+                break;
+
+            case Powerup.Type.Invisibility:
+                break;
+        }
     }
 
     private void DetectEggs()
