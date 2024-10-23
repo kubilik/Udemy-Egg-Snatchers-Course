@@ -9,7 +9,9 @@ public class PlayerRenderer : NetworkBehaviour
     [SerializeField] private Renderer[] renderers;
 
     [Header(" Settings ")]
+    [SerializeField] private AnimationCurve fadeCurve;
     private const string transparencyRef = "Transparency";
+    public bool IsInvisible { get; private set; }
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +29,35 @@ public class PlayerRenderer : NetworkBehaviour
     [Rpc(SendTo.Everyone)]
     private void HideRpc()
     {
+        if (IsInvisible)
+            return;
+
+        IsInvisible = true;
+
         float alpha = IsOwner ? .2f : 0;
-        UpdateTransparency(alpha);
+
+        LeanTween.value(1, alpha, 2)
+            .setEase(fadeCurve)
+            .setOnUpdate((value) => UpdateTransparency(value));
+
+        LeanTween.delayedCall(10, Appear);
+
+        //UpdateTransparency(alpha);
     }
+
+    private void Appear() => AppearRpc();
+
+    [Rpc(SendTo.Everyone)]
+    private void AppearRpc()
+    {
+        float alpha = IsOwner ? .2f : 0;
+
+        LeanTween.value(alpha, 1, 2)
+            .setEase(fadeCurve)
+            .setOnUpdate((value) => UpdateTransparency(value))
+            .setOnComplete(() => IsInvisible = false);
+    }
+
 
     private void UpdateTransparency(float alpha)
     {
