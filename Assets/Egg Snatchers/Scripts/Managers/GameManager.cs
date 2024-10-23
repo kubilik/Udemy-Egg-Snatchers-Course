@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Unity.Netcode;
+using System;
 
 public enum GameState { Waiting, Game, Win, Lose }
 
@@ -27,6 +28,15 @@ public class GameManager : NetworkBehaviour
     private void Start()
     {
         NetworkManager.OnClientConnectedCallback += ClientConnectedCallback;
+        PlayerFillManager.onPlayerEmpty += PlayerEmptyCallback;
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        NetworkManager.OnClientConnectedCallback -= ClientConnectedCallback;
+        PlayerFillManager.onPlayerEmpty -= PlayerEmptyCallback;
     }
 
     private void ClientConnectedCallback(ulong obj)
@@ -50,12 +60,32 @@ public class GameManager : NetworkBehaviour
 
         foreach (IGameStateListener gameStateListener in gameStateListeners)
             gameStateListener.GameStateChangedCallback(gameState);
+
+        Debug.Log("New Game State : " + gameState);
     }
 
     [Rpc(SendTo.Everyone)]
     private void StartGameRpc()
     {
         SetGameState(GameState.Game);
+    }
+    private void PlayerEmptyCallback(ulong losingPlayerId)
+    {
+        if (gameState != GameState.Game)
+            return;
+
+        GameEndedRpc(losingPlayerId);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void GameEndedRpc(ulong losingPlayerId)
+    {
+        ulong localPlayerId = NetworkManager.SpawnManager.GetLocalPlayerObject().OwnerClientId;
+
+        if (localPlayerId == losingPlayerId)
+            SetGameState(GameState.Lose);
+        else
+            SetGameState(GameState.Win);
     }
 
     public bool IsGameState()

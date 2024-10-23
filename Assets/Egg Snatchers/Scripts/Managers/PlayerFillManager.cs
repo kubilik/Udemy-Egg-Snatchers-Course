@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(NetworkObject))]
 public class PlayerFillManager : NetworkBehaviour, IGameStateListener
@@ -13,12 +14,15 @@ public class PlayerFillManager : NetworkBehaviour, IGameStateListener
     [Header(" Settings ")]
     [SerializeField] private float fillStep;
 
+    [Header(" Actions ")]
+    public static Action<ulong> onPlayerEmpty;
+
     void Update()
     {
         if (!canUpdatePlayers)
             return;
 
-        UpdatePlayersRpc();
+        UpdatePlayersRpc(fillStep);
     }
 
     private void StartUpdatingPlayers()
@@ -32,13 +36,24 @@ public class PlayerFillManager : NetworkBehaviour, IGameStateListener
     }
 
     [Rpc(SendTo.Everyone)]
-    private void UpdatePlayersRpc()
+    private void UpdatePlayersRpc(float fillStep)
     {
         if (players == null || players.Length < 2)
             StorePlayers();
 
         foreach (PlayerFill playerFill in players)
-            playerFill.UpdateFill(fillStep);
+            if (playerFill.UpdateFill(fillStep))
+                PlayerIsEmpty(playerFill);
+    }
+
+    private void PlayerIsEmpty(PlayerFill player)
+    {
+        canUpdatePlayers = false;
+
+        if (!IsServer)
+            return;
+
+        onPlayerEmpty?.Invoke(player.GetComponent<NetworkObject>().OwnerClientId);
     }
 
     public void GameStateChangedCallback(GameState gameState)

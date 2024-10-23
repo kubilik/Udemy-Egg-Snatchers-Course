@@ -30,7 +30,7 @@ public class PlayerFill : MonoBehaviour
 
     }
 
-    public void UpdateFill(float fillStep)
+    public bool UpdateFill(float fillStep)
     {
         if (playerDetection.IsHoldingEgg)
             fillAmount += fillStep;
@@ -39,6 +39,8 @@ public class PlayerFill : MonoBehaviour
 
         fillAmount = Mathf.Clamp01(fillAmount);
         UpdateRenderers();
+
+        return fillAmount <= 0;
     }
 
     private void UpdateRenderers()
