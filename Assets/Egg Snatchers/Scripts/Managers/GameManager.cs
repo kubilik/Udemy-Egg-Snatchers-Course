@@ -28,7 +28,6 @@ public class GameManager : NetworkBehaviour
 
     private void Start()
     {
-        NetworkManager.OnClientConnectedCallback += ClientConnectedCallback;
         PlayerFillManager.onPlayerEmpty += PlayerEmptyCallback;
     }
     public override void OnNetworkSpawn()
@@ -38,30 +37,28 @@ public class GameManager : NetworkBehaviour
         if (!IsServer)
             return;
 
+        Invoke("Initialize", Time.deltaTime * 3);
+    }
+
+    private void Initialize()
+    {
         foreach (KeyValuePair<ulong, NetworkClient> kvp in NetworkManager.Singleton.ConnectedClients)
         {
             NetworkObject player = Instantiate(playerPrefab);
             player.SpawnAsPlayerObject(kvp.Key);
         }
+
+        StartGameRpc();
     }
+
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
 
-        NetworkManager.OnClientConnectedCallback -= ClientConnectedCallback;
         PlayerFillManager.onPlayerEmpty -= PlayerEmptyCallback;
     }
 
-    private void ClientConnectedCallback(ulong obj)
-    {
-        if (!IsServer)
-            return;
 
-        if (NetworkManager.Singleton.ConnectedClients.Count < 2)
-            return;
-
-        StartGameRpc();
-    }
 
     public void SetGameState(GameState gameState)
     {

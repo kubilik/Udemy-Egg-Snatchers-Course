@@ -34,7 +34,7 @@ public class PlayerDetection : NetworkBehaviour
 
     void Update()
     {
-        if (!GameManager.instance.IsGameState())
+        if (GameManager.instance == null || !GameManager.instance.IsGameState())
             return;
 
         DetectTrampolines();

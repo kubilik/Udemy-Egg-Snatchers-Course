@@ -40,7 +40,7 @@ public class PlayerController : NetworkBehaviour
 
         MoveVertical();
 
-        if (!GameManager.instance.IsGameState())
+        if (GameManager.instance == null || !GameManager.instance.IsGameState())
             return;
 
         MoveHorizontal();
