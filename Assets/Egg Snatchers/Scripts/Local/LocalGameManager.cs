@@ -14,6 +14,8 @@ public class LocalGameManager : MonoBehaviour
 
     private LocalGameState gameState;
 
+    private bool isServer;
+
     private void Awake()
     {
         if (instance == null)
@@ -22,24 +24,23 @@ public class LocalGameManager : MonoBehaviour
             Destroy(gameObject);
 
         IPButton.onClicked += IPButtonClickedCallback;
+
     }
 
     private void OnDestroy()
     {
         IPButton.onClicked -= IPButtonClickedCallback;
 
-    }
-
-    private void IPButtonClickedCallback(string ip)
-    {
-        UnityTransport utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
-        utp.SetConnectionData(ip, 7777);
+        if (NetworkManager.Singleton != null)
+            NetworkManager.Singleton.OnClientConnectedCallback -= ClientConnectedCallback;
     }
 
     private void Start()
     {
+        NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectedCallback;
         SetGameState(LocalGameState.Menu);
     }
+
     public void SetGameState(LocalGameState gameState)
     {
         this.gameState = gameState;
@@ -60,6 +61,8 @@ public class LocalGameManager : MonoBehaviour
         utp.SetConnectionData(NetworkUtilities.GetLocalIPv4(), 7777);
 
         NetworkManager.Singleton.StartHost();
+
+        isServer = true;
     }
 
     public void BackFromWaitingCallback()
@@ -76,6 +79,34 @@ public class LocalGameManager : MonoBehaviour
     public void BackFromNetworkScan()
     {
         SetGameState(LocalGameState.Menu);
+    }
+
+    public void JoinAfterIPSelectedCallback()
+    {
+        SetGameState(LocalGameState.Joining);
+        NetworkManager.Singleton.StartClient();
+    }
+
+    private void IPButtonClickedCallback(string ip)
+    {
+        UnityTransport utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        utp.SetConnectionData(ip, 7777);
+    }
+
+    private void ClientConnectedCallback(ulong clientId)
+    {
+        if (!isServer)
+            return;
+
+        int playerCount = NetworkManager.Singleton.ConnectedClients.Count;
+
+        if (playerCount == 2)
+            StartGame();
+    }
+
+    private void StartGame()
+    {
+        NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 }
 

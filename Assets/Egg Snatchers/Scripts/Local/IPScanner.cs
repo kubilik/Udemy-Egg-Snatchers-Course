@@ -74,7 +74,7 @@ public class IPScanner : MonoBehaviour, ILocalGameStateListener
 
             timer += Time.deltaTime;
 
-            if (timer >= 5)
+            if (timer >= 15)
             {
                 allDone = true;
                 Debug.Log("Timeout");
