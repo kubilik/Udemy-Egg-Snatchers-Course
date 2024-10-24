@@ -13,7 +13,12 @@ public class UIManager : MonoBehaviour, IGameStateListener
 
     private void Awake()
     {
-        panels = new GameObject[] { gamePanel, winPanel, losePanel };
+        panels = new GameObject[]
+        {
+            gamePanel,
+            winPanel,
+            losePanel
+        };
     }
 
     private void ShowPanel(GameObject panel)

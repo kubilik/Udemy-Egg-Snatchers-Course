@@ -15,7 +15,7 @@ public class LocalGameManager : MonoBehaviour
 
     private void Awake()
     {
-        gameState = LocalGameState.Menu;
+        SetGameState(LocalGameState.Menu);
 
         if (instance == null)
             instance = this;
@@ -43,6 +43,12 @@ public class LocalGameManager : MonoBehaviour
         utp.SetConnectionData(NetworkUtilities.GetLocalIPv4(), 7777);
 
         NetworkManager.Singleton.StartHost();
+    }
+
+    public void BackFromWaitingCallback()
+    {
+        SetGameState(LocalGameState.Menu);
+        NetworkManager.Singleton.Shutdown();
     }
 }
 
