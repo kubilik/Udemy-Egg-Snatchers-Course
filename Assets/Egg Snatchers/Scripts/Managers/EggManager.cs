@@ -3,32 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class EggManager : NetworkBehaviour
+public class EggManager : NetworkBehaviour, IGameStateListener
 {
     [Header(" Elements ")]
     [SerializeField] private GameObject eggPrefab;
     [SerializeField] private Transform[] spawnPositions;
-
-
-    void Start()
-    {
-        NetworkManager.OnServerStarted += ServerStartedCallback;
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
-
-        NetworkManager.OnServerStarted -= ServerStartedCallback;
-    }
-
-    private void ServerStartedCallback()
-    {
-        if (!IsServer)
-            return;
-
-        SpawnEgg();
-    }
 
     private void SpawnEgg()
     {
@@ -36,5 +15,16 @@ public class EggManager : NetworkBehaviour
         GameObject eggInstance = Instantiate(eggPrefab, spawnPosition, Quaternion.identity, transform);
 
         eggInstance.GetComponent<NetworkObject>().Spawn();
+    }
+
+    public void GameStateChangedCallback(GameState gameState)
+    {
+        if (!IsServer)
+            return;
+
+        if (gameState != GameState.Game)
+            return;
+
+        SpawnEgg();
     }
 }
