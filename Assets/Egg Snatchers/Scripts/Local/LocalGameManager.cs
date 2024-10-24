@@ -15,14 +15,15 @@ public class LocalGameManager : MonoBehaviour
 
     private void Awake()
     {
-        SetGameState(LocalGameState.Menu);
-
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
     }
-
+    private void Start()
+    {
+        SetGameState(LocalGameState.Menu);
+    }
     public void SetGameState(LocalGameState gameState)
     {
         this.gameState = gameState;
@@ -49,6 +50,16 @@ public class LocalGameManager : MonoBehaviour
     {
         SetGameState(LocalGameState.Menu);
         NetworkManager.Singleton.Shutdown();
+    }
+
+    public void JoinButtonCallback()
+    {
+        SetGameState(LocalGameState.Scanning);
+    }
+
+    public void BackFromNetworkScan()
+    {
+        SetGameState(LocalGameState.Menu);
     }
 }
 
