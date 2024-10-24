@@ -11,9 +11,10 @@ public enum GameState { Waiting, Game, Win, Lose }
 public class GameManager : NetworkBehaviour
 {
     public static GameManager instance;
-
     private GameState gameState;
 
+    [Header(" Elements ")]
+    [SerializeField] private NetworkObject playerPrefab;
 
     private void Awake()
     {
@@ -30,7 +31,19 @@ public class GameManager : NetworkBehaviour
         NetworkManager.OnClientConnectedCallback += ClientConnectedCallback;
         PlayerFillManager.onPlayerEmpty += PlayerEmptyCallback;
     }
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
 
+        if (!IsServer)
+            return;
+
+        foreach (KeyValuePair<ulong, NetworkClient> kvp in NetworkManager.Singleton.ConnectedClients)
+        {
+            NetworkObject player = Instantiate(playerPrefab);
+            player.SpawnAsPlayerObject(kvp.Key);
+        }
+    }
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
