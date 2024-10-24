@@ -1447,6 +1447,7 @@ MonoBehaviour:
   networkScanPanel: {fileID: 243669123}
   joiningPanel: {fileID: 505527205}
   ipText: {fileID: 1039193173}
+  joinButton: {fileID: 1573229252}
 --- !u!1 &498894028
 GameObject:
   m_ObjectHideFlags: 0
@@ -3397,7 +3398,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1970716890}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1849988472}
+        m_TargetAssemblyTypeName: IPScanner, Assembly-CSharp
+        m_MethodName: Scan
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1970716890
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public class IPScanner : MonoBehaviour, ILocalGameStateListener
 
     }
 
-    private void Scan()
+    public void Scan()
     {
         // 192.168.1.4
         // 192.168.1.0 - 192.168.1.255

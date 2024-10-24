@@ -2,20 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class LocalUIManager : MonoBehaviour, ILocalGameStateListener
 {
-    [Header(" Elements ")]
+    [Header(" Panels ")]
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject waitingPanel;
     [SerializeField] private GameObject networkScanPanel;
     [SerializeField] private GameObject joiningPanel;
+
+    [Header(" Elements ")]
     [SerializeField] private TextMeshProUGUI ipText;
+    [SerializeField] private GameObject joinButton;
 
     private GameObject[] panels;
 
     private void Awake()
     {
+        IPButton.onClicked += IPButtonClickedCallback;
+
         panels = new GameObject[]
         {
             menuPanel,
@@ -24,6 +30,15 @@ public class LocalUIManager : MonoBehaviour, ILocalGameStateListener
             joiningPanel
         };
     }
+    private void OnDestroy()
+    {
+        IPButton.onClicked -= IPButtonClickedCallback;
+    }
+
+    private void IPButtonClickedCallback(string ip) => joinButton.SetActive(true);
+
+
+
 
     private void Start()
     {
@@ -49,6 +64,7 @@ public class LocalUIManager : MonoBehaviour, ILocalGameStateListener
                 break;
 
             case LocalGameState.Scanning:
+                joinButton.SetActive(false);
                 ShowPanel(networkScanPanel);
                 break;
 

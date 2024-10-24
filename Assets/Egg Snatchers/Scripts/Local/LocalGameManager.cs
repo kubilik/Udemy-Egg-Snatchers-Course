@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using System;
 
 public enum LocalGameState { Menu, Waiting, Scanning, Joining }
 
@@ -19,7 +20,22 @@ public class LocalGameManager : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
+
+        IPButton.onClicked += IPButtonClickedCallback;
     }
+
+    private void OnDestroy()
+    {
+        IPButton.onClicked -= IPButtonClickedCallback;
+
+    }
+
+    private void IPButtonClickedCallback(string ip)
+    {
+        UnityTransport utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        utp.SetConnectionData(ip, 7777);
+    }
+
     private void Start()
     {
         SetGameState(LocalGameState.Menu);
