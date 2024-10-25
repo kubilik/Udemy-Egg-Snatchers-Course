@@ -11,17 +11,11 @@ public class PlayerPlacer : NetworkBehaviour, IGameStateListener
 
     public void GameStateChangedCallback(GameState gameState)
     {
-        Debug.Log("Game State : " + gameState);
-
         if (gameState != GameState.Game)
             return;
 
-        Debug.Log("Server State : " + IsServer);
-
         if (!IsServer)
             return;
-
-        Debug.Log("Placing players");
 
         potentialPositions = new List<Transform>(spawnPositions);
 
@@ -44,12 +38,5 @@ public class PlayerPlacer : NetworkBehaviour, IGameStateListener
             return;
 
         NetworkManager.Singleton.LocalClient.PlayerObject.transform.position = spawnPosition;
-
-        Debug.Log("player placed");
-    }
-
-    private void Update()
-    {
-        Debug.Log("Server State : " + IsServer);
     }
 }

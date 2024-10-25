@@ -16,6 +16,9 @@ public class GameManager : NetworkBehaviour
     [Header(" Elements ")]
     [SerializeField] private NetworkObject playerPrefab;
 
+    [Header(" Settings ")]
+    private int playerSpawnedCount;
+
     private void Awake()
     {
         gameState = GameState.Waiting;
@@ -24,6 +27,20 @@ public class GameManager : NetworkBehaviour
             instance = this;
         else
             Destroy(gameObject);
+
+        PlayerController.onSpawned += PlayerSpawnedCallback;
+    }
+
+    private void PlayerSpawnedCallback()
+    {
+        if (!IsServer)
+            return;
+
+        Debug.Log("Player spawned!");
+        playerSpawnedCount++;
+
+        if (playerSpawnedCount == 2)
+            Invoke("StartGameRpc", Time.deltaTime * 3);
     }
 
     private void Start()
@@ -48,7 +65,7 @@ public class GameManager : NetworkBehaviour
             player.SpawnAsPlayerObject(kvp.Key);
         }
 
-        StartGameRpc();
+        //StartGameRpc();
     }
 
     public override void OnNetworkDespawn()
@@ -56,6 +73,8 @@ public class GameManager : NetworkBehaviour
         base.OnNetworkDespawn();
 
         PlayerFillManager.onPlayerEmpty -= PlayerEmptyCallback;
+        PlayerController.onSpawned -= PlayerSpawnedCallback;
+
     }
 
 

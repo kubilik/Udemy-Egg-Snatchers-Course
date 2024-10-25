@@ -10,17 +10,17 @@ public class PlayerFill : MonoBehaviour
     private PlayerDetection playerDetection;
 
     [Header(" Settings ")]
-    private float fillAmount;
+    private float fillAmount = 1;
     private const string fillAmountRef = "Fill_Amount";
 
     private void Awake()
     {
         playerDetection = GetComponent<PlayerDetection>();
+        fillAmount = 1;
     }
 
     void Start()
     {
-        fillAmount = 1;
         UpdateRenderers();
     }
 

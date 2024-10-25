@@ -28,6 +28,14 @@ public class PlayerController : NetworkBehaviour
     public Action onFallStarted;
     public Action onLandStarted;
 
+    public static Action onSpawned;
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        onSpawned?.Invoke();
+    }
+
     void Start()
     {
         playerState = PlayerState.Grounded;
