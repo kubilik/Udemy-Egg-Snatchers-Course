@@ -17,6 +17,27 @@ public class PlayerFillManager : NetworkBehaviour, IGameStateListener
     [Header(" Actions ")]
     public static Action<ulong> onPlayerEmpty;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        EggManager.onEggSpawned += EggSpawnedCallback;
+    }
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        EggManager.onEggSpawned -= EggSpawnedCallback;
+    }
+
+
+    private void EggSpawnedCallback()
+    {
+        if (!IsServer)
+            return;
+
+        StartUpdatingPlayers();
+    }
     void Update()
     {
         if (!canUpdatePlayers)
@@ -59,12 +80,10 @@ public class PlayerFillManager : NetworkBehaviour, IGameStateListener
     public void GameStateChangedCallback(GameState gameState)
     {
         if (gameState != GameState.Game)
-            return;
-
-        if (!IsServer)
-            return;
-
-        StartUpdatingPlayers();
+        {
+            canUpdatePlayers = false;
+            players = null;
+        }
     }
 
 }
