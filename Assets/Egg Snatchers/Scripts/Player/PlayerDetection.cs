@@ -27,6 +27,8 @@ public class PlayerDetection : NetworkBehaviour
     void Start()
     {
         canStealEgg = true;
+        SetIsHoldingEggRpc(false);
+
         playerController = GetComponent<PlayerController>();
         playerRenderer = GetComponent<PlayerRenderer>();
     }
@@ -111,7 +113,7 @@ public class PlayerDetection : NetworkBehaviour
 
     private void LoseEgg()
     {
-        IsHoldingEgg = false;
+        SetIsHoldingEggRpc(false);
         canStealEgg = false;
 
         StartCoroutine(LoseEggCoroutine());
@@ -128,7 +130,13 @@ public class PlayerDetection : NetworkBehaviour
         egg.transform.SetParent(transform);
         egg.transform.localPosition = Vector3.up * 3.5f;
 
-        IsHoldingEgg = true;
+        SetIsHoldingEggRpc(true);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetIsHoldingEggRpc(bool value)
+    {
+        IsHoldingEgg = value;
     }
 
     public bool CanGoThere(Vector3 targetPosition, out Collider firstCollider)
