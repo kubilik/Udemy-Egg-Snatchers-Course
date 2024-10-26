@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Mathematics;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerAnimator : NetworkBehaviour
+public class PlayerAnimator : NetworkBehaviour, IGameStateListener
 {
     [Header(" Components ")]
     private PlayerController playerController;
@@ -59,5 +60,23 @@ public class PlayerAnimator : NetworkBehaviour
     private void Land()
     {
         animator.Play("Land");
+    }
+
+    private void Lose()
+    {
+        animator.transform.rotation = Quaternion.Euler(0, 180, 0);
+        animator.Play("Lose");
+    }
+    private void Win()
+    {
+        animator.transform.rotation = Quaternion.Euler(0, 180, 0);
+        animator.Play("Win");
+    }
+    public void GameStateChangedCallback(GameState gameState)
+    {
+        if (gameState == GameState.Lose)
+            Lose();
+        else if (gameState == GameState.Win)
+            Win();
     }
 }
