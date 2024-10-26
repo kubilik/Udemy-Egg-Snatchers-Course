@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Unity.Netcode;
-using System;
+using UnityEngine.SceneManagement;
 
 public enum GameState { Waiting, Game, Win, Lose }
 
@@ -115,6 +115,12 @@ public class GameManager : NetworkBehaviour
             SetGameState(GameState.Lose);
         else
             SetGameState(GameState.Win);
+    }
+
+    public void ContinueButtonCallback()
+    {
+        NetworkManager.Singleton.Shutdown();
+        SceneManager.LoadScene(0);
     }
 
     public bool IsGameState()
