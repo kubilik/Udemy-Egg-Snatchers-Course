@@ -22,11 +22,13 @@ public class PlayerController : NetworkBehaviour
     private float moveSpeed;
     public float XSpeed { get; private set; }
     private float ySpeed;
+    public bool IsStun { get; private set; }
 
     [Header(" Actions ")]
     public Action onJumpStarted;
     public Action onFallStarted;
     public Action onLandStarted;
+    public Action onStun;
 
     public static Action onSpawned;
 
@@ -65,6 +67,9 @@ public class PlayerController : NetworkBehaviour
 
     private void MoveHorizontal()
     {
+        if (IsStun)
+            return;
+
         Vector2 moveVector = InputManager.instance.GetMoveVector();
 
         UpdateXSpeedRpc(Mathf.Abs(moveVector.x));
@@ -165,6 +170,9 @@ public class PlayerController : NetworkBehaviour
 
     public void Jump()
     {
+        if (IsStun)
+            return;
+
         playerState = PlayerState.Air;
         ySpeed = jumpSpeed;
 
@@ -173,6 +181,9 @@ public class PlayerController : NetworkBehaviour
 
     private void MiniJump()
     {
+        if (IsStun)
+            return;
+
         if (!IsOwner)
             return;
 
@@ -187,7 +198,21 @@ public class PlayerController : NetworkBehaviour
 
     public void GetHit(ulong ownerClientId)
     {
-        Debug.Log("I got Hit !" + ownerClientId);
+        GetHitRpc(ownerClientId);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void GetHitRpc(ulong ownerClientId)
+    {
+        if (ownerClientId != OwnerClientId)
+            return;
+
+        IsStun = true;
+
+        LeanTween.cancel(gameObject);
+        LeanTween.delayedCall(gameObject, 2.5f, () => IsStun = false);
+
+        onStun?.Invoke();
     }
 
     [Rpc(SendTo.Everyone)]

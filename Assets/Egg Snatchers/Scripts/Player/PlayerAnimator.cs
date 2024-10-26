@@ -23,6 +23,7 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
         playerController.onJumpStarted += Jump;
         playerController.onFallStarted += Fall;
         playerController.onLandStarted += Land;
+        playerController.onStun += Stun;
 
         AttackButton.onClicked += Attack;
     }
@@ -32,6 +33,7 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
         playerController.onJumpStarted -= Jump;
         playerController.onFallStarted -= Fall;
         playerController.onLandStarted -= Land;
+        playerController.onStun -= Stun;
 
         AttackButton.onClicked -= Attack;
     }
@@ -56,21 +58,33 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
 
     private void Jump()
     {
+        if (playerController.IsStun)
+            return;
+
         animator.Play("Jump");
     }
 
     private void Fall()
     {
+        if (playerController.IsStun)
+            return;
+
         animator.Play("Fall");
     }
 
     private void Land()
     {
+        if (playerController.IsStun)
+            return;
+
         animator.Play("Land");
     }
 
     private void Attack()
     {
+        if (playerController.IsStun)
+            return;
+
         if (!IsOwner)
             return;
 
@@ -78,6 +92,11 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
             return;
 
         animator.Play("Attack");
+    }
+
+    private void Stun()
+    {
+        animator.Play("Stun");
     }
 
     private void Lose()

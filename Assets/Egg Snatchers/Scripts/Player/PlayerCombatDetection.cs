@@ -44,12 +44,11 @@ public class PlayerCombatDetection : MonoBehaviour
     {
         if (collider.TryGetComponent(out PlayerController playerController))
         {
-            if (playerController == GetComponent<PlayerController>())
+            if (playerController == GetComponentInParent<PlayerController>())
                 return;
-            /*
-            if(playerController.IsStun)
+
+            if (playerController.IsStun)
                 return;
-            */
 
             playerController.GetHit(playerController.OwnerClientId);
 
