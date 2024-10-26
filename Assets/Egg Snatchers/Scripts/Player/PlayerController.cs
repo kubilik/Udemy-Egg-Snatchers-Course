@@ -185,6 +185,11 @@ public class PlayerController : NetworkBehaviour
         onJumpStarted?.Invoke();
     }
 
+    public void GetHit(ulong ownerClientId)
+    {
+        Debug.Log("I got Hit !" + ownerClientId);
+    }
+
     [Rpc(SendTo.Everyone)]
     private void UpdateXSpeedRpc(float xSpeed)
     {
