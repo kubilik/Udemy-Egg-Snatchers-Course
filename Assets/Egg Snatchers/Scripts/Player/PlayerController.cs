@@ -34,7 +34,16 @@ public class PlayerController : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         onSpawned?.Invoke();
+
+        JumpButton.onClicked += MiniJump;
     }
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        JumpButton.onClicked -= MiniJump;
+    }
+
 
     void Start()
     {
@@ -158,6 +167,20 @@ public class PlayerController : NetworkBehaviour
     {
         playerState = PlayerState.Air;
         ySpeed = jumpSpeed;
+
+        onJumpStarted?.Invoke();
+    }
+
+    private void MiniJump()
+    {
+        if (!IsOwner)
+            return;
+
+        if (playerState != PlayerState.Grounded)
+            return;
+
+        playerState = PlayerState.Air;
+        ySpeed = jumpSpeed / 2;
 
         onJumpStarted?.Invoke();
     }
