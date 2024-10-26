@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Mathematics;
+using System;
 
-[RequireComponent(typeof(PlayerController))]
+[RequireComponent(typeof(PlayerController), typeof(PlayerDetection))]
 public class PlayerAnimator : NetworkBehaviour, IGameStateListener
 {
     [Header(" Components ")]
     private PlayerController playerController;
+    private PlayerDetection playerDetection;
 
     [Header(" Elements ")]
     [SerializeField] private Animator animator;
@@ -16,10 +18,13 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        playerDetection = GetComponent<PlayerDetection>();
 
         playerController.onJumpStarted += Jump;
         playerController.onFallStarted += Fall;
         playerController.onLandStarted += Land;
+
+        AttackButton.onClicked += Attack;
     }
 
     private void OnDestroy()
@@ -28,7 +33,9 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
         playerController.onFallStarted -= Fall;
         playerController.onLandStarted -= Land;
 
+        AttackButton.onClicked -= Attack;
     }
+
 
     void Start()
     {
@@ -60,6 +67,17 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
     private void Land()
     {
         animator.Play("Land");
+    }
+
+    private void Attack()
+    {
+        if (!IsOwner)
+            return;
+
+        if (playerDetection.IsHoldingEgg)
+            return;
+
+        animator.Play("Attack");
     }
 
     private void Lose()
