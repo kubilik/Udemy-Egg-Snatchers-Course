@@ -137,6 +137,8 @@ public class PlayerDetection : NetworkBehaviour
 
         SetIsHoldingEggRpc(true);
 
+        playerRenderer.Appear();
+
         onEggTaken?.Invoke();
     }
 

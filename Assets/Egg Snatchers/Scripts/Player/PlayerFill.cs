@@ -8,6 +8,7 @@ public class PlayerFill : MonoBehaviour
     [Header(" Elements ")]
     [SerializeField] private Renderer[] renderers;
     private PlayerDetection playerDetection;
+    private PlayerRenderer playerRenderer;
 
     [Header(" Settings ")]
     private float fillAmount = 1;
@@ -16,6 +17,8 @@ public class PlayerFill : MonoBehaviour
     private void Awake()
     {
         playerDetection = GetComponent<PlayerDetection>();
+        playerRenderer = GetComponent<PlayerRenderer>();
+
         fillAmount = 1;
     }
 
@@ -35,7 +38,10 @@ public class PlayerFill : MonoBehaviour
         if (playerDetection.IsHoldingEgg)
             fillAmount += fillStep;
         else
-            fillAmount -= fillStep;
+        {
+            if (!playerRenderer.IsInvisible)
+                fillAmount -= fillStep;
+        }
 
         fillAmount = Mathf.Clamp01(fillAmount);
         UpdateRenderers();

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using System;
 
 public class PlayerRenderer : NetworkBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerRenderer : NetworkBehaviour
     [SerializeField] private AnimationCurve fadeCurve;
     private const string transparencyRef = "Transparency";
     public bool IsInvisible { get; private set; }
+
 
     // Start is called before the first frame update
     void Start()
@@ -36,23 +38,29 @@ public class PlayerRenderer : NetworkBehaviour
 
         float alpha = IsOwner ? .2f : 0;
 
-        LeanTween.value(1, alpha, 2)
+        LeanTween.cancel(gameObject);
+
+        LeanTween.value(gameObject, 1, alpha, 2)
             .setEase(fadeCurve)
             .setOnUpdate((value) => UpdateTransparency(value));
 
-        LeanTween.delayedCall(10, Appear);
+        LeanTween.delayedCall(gameObject, 10, Appear);
 
         //UpdateTransparency(alpha);
     }
 
-    private void Appear() => AppearRpc();
+    public void Appear() => AppearRpc();
 
     [Rpc(SendTo.Everyone)]
     private void AppearRpc()
     {
+        if (!IsInvisible)
+            return;
+
         float alpha = IsOwner ? .2f : 0;
 
-        LeanTween.value(alpha, 1, 2)
+        LeanTween.cancel(gameObject);
+        LeanTween.value(gameObject, alpha, 1, 2)
             .setEase(fadeCurve)
             .setOnUpdate((value) => UpdateTransparency(value))
             .setOnComplete(() => IsInvisible = false);
