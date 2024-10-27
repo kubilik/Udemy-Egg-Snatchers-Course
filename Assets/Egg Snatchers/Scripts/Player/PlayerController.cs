@@ -176,6 +176,8 @@ public class PlayerController : NetworkBehaviour
         playerState = PlayerState.Air;
         ySpeed = jumpSpeed;
 
+        HapticsManager.Medium();
+
         onJumpStarted?.Invoke();
     }
 
@@ -192,6 +194,8 @@ public class PlayerController : NetworkBehaviour
 
         playerState = PlayerState.Air;
         ySpeed = jumpSpeed / 2;
+
+        HapticsManager.Medium();
 
         onJumpStarted?.Invoke();
     }
@@ -211,6 +215,8 @@ public class PlayerController : NetworkBehaviour
 
         LeanTween.cancel(gameObject);
         LeanTween.delayedCall(gameObject, 2.5f, () => IsStun = false);
+
+        HapticsManager.Heavy();
 
         onStun?.Invoke();
     }

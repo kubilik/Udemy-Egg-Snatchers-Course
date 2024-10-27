@@ -201,6 +201,29 @@
       },
       "url": "https://packages.unity.com"
     },
+    "xyz.candycoded.candycoded": {
+      "version": "4.4.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0",
+        "com.unity.modules.screencapture": "1.0.0",
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.ugui": "1.0.0"
+      },
+      "url": "https://registry.npmjs.com"
+    },
+    "xyz.candycoded.hapticfeedback": {
+      "version": "1.0.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.androidjni": "1.0.0"
+      },
+      "url": "https://registry.npmjs.com"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
