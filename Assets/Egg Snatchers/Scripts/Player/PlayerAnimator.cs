@@ -26,6 +26,9 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
         playerController.onStun += Stun;
 
         AttackButton.onClicked += Attack;
+
+        playerDetection.onEggTaken += EggTakenCallback;
+        playerDetection.onEggLost += EggLostCallback;
     }
 
     private void OnDestroy()
@@ -36,6 +39,9 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
         playerController.onStun -= Stun;
 
         AttackButton.onClicked -= Attack;
+
+        playerDetection.onEggTaken -= EggTakenCallback;
+        playerDetection.onEggLost -= EggLostCallback;
     }
 
 
@@ -97,6 +103,16 @@ public class PlayerAnimator : NetworkBehaviour, IGameStateListener
     private void Stun()
     {
         animator.Play("Stun");
+    }
+
+    private void EggTakenCallback()
+    {
+        animator.SetLayerWeight(1, 1);
+    }
+
+    private void EggLostCallback()
+    {
+        animator.SetLayerWeight(1, 0);
     }
 
     private void Lose()

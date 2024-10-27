@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using Unity.Netcode;
+using System;
 
 [RequireComponent(typeof(PlayerController), typeof(PlayerRenderer))]
 public class PlayerDetection : NetworkBehaviour
@@ -21,8 +21,11 @@ public class PlayerDetection : NetworkBehaviour
 
     [Header(" Settings ")]
     private bool canStealEgg;
-
     public bool IsHoldingEgg { get; private set; }
+
+    [Header(" Actions ")]
+    public Action onEggTaken;
+    public Action onEggLost;
 
     void Start()
     {
@@ -117,6 +120,8 @@ public class PlayerDetection : NetworkBehaviour
         canStealEgg = false;
 
         StartCoroutine(LoseEggCoroutine());
+
+        onEggLost?.Invoke();
     }
 
     IEnumerator LoseEggCoroutine()
@@ -131,6 +136,8 @@ public class PlayerDetection : NetworkBehaviour
         egg.transform.localPosition = Vector3.up * 3.5f;
 
         SetIsHoldingEggRpc(true);
+
+        onEggTaken?.Invoke();
     }
 
     [Rpc(SendTo.ClientsAndHost)]
