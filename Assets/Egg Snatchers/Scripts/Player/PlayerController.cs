@@ -177,6 +177,7 @@ public class PlayerController : NetworkBehaviour
         ySpeed = jumpSpeed;
 
         HapticsManager.Medium();
+        AudioManager.instance.PlayJumpSound();
 
         onJumpStarted?.Invoke();
     }
@@ -196,6 +197,7 @@ public class PlayerController : NetworkBehaviour
         ySpeed = jumpSpeed / 2;
 
         HapticsManager.Medium();
+        AudioManager.instance.PlayJumpSound();
 
         onJumpStarted?.Invoke();
     }
